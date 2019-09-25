@@ -1,0 +1,53 @@
+<mat-card>
+  <mat-card-header>
+    <div fxLayout="row wrap" class="w80">
+      <h4 class="wrap-word">{{'usersModule.secondaryTitle' | translate}}</h4>
+    </div>
+    <button mat-icon-button [mat-dialog-close] style="position: absolute; right: 1%; "><i
+      class="ti-close"></i></button>
+  </mat-card-header>
+  <mat-card-content class="pad-all2">
+    <div fxLayout="row wrap" class="mar-btm">
+
+      <div fxFlex.gt-sm="100" class="example-container" >
+        <div>
+  <form [formGroup]="usersForm">
+    <mat-form-field class="full-width">
+      <mat-select multiple (selectionChange)="levelSelection($event.value,true)" placeholder="{{ 'usersModule.createuser.levelSelection' | translate}}" formControlName="level">
+      <mat-option *ngFor="let level of totalLevels" [value]="level">
+        {{level.floorName}}</mat-option>
+    </mat-select>
+    <mat-error *ngIf="usersForm.controls.level.errors?.required">{{ 'ActionNames.errorSelectMessage' | translate
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field style="width: 100%" >
+      <mat-select multiple (selectionChange)="selectDepartMent($event.value,true)" placeholder="{{ 'usersModule.createuser.departmentSelection' | translate}}"
+        formControlName="department">       
+
+          <mat-optgroup *ngFor="let floor of filterFloorGroup" [label]="floor.floorName">
+  
+            <mat-option [value]="dept" *ngFor="let dept of floor.departments">{{dept.deptName}}</mat-option>
+          </mat-optgroup>
+      </mat-select>
+      <mat-error *ngIf="usersForm.controls.department.errors?.required">{{ 'ActionNames.errorSelectMessage' | translate}}</mat-error>
+    </mat-form-field>
+    <mat-form-field style="width: 100%">
+      <mat-select multiple placeholder="{{ 'usersModule.AssignDoctors' | translate}}" formControlName="doctor">
+        <mat-optgroup *ngFor="let department of filterDeptGroup" label="{{department?.floorName}} - {{department?.deptName}}"> 
+        <mat-option *ngFor="let doctor of doctorsList" [value]="doctor">
+          {{doctor.firstname}} {{doctor.lastname}}</mat-option>
+        </mat-optgroup>
+      </mat-select>
+      <mat-error *ngIf="usersForm.controls.doctor.errors?.required">{{ 'ActionNames.errorSelectMessage' | translate}}</mat-error>
+    </mat-form-field>
+    <div class="clearfix">
+      <button mat-raised-button color="primary" (click)="createSecondaryProfile()" [disabled]="usersForm.value.level!=null && usersForm.invalid">{{ 'ActionNames.submit' | translate}}</button>
+    </div>
+  </form></div></div></div></mat-card-content>
+</mat-card>
+
+<div class="fullloader" *ngIf="loading">
+  <div class="fullloaderInner">
+    <img src="assets/images/loading.gif">
+  </div>
+</div>
